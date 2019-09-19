@@ -1,26 +1,23 @@
 import json
 from datetime import datetime
 
-
 # date format in data.json
 date_format = "%Y-%m-%d"
 
 # list of the rentals
 rentals = []
 
-
 # find the car corresponding to the rental
 def find_car(rental):
     return [car for car in data['cars'] if car['id'] == rental['car_id']][0]
 
-# find the option corresponding to the rental
+# find options corresponding to the rental
 def find_option(rental):
-    return [option for option in data['options'] if option['rental_id'] == rental['id']]
+    return [option for option in data['options'] if option['rental_id'] == rental['id']][0]
 
 # compute the number of days of a rental
 def number_of_days(rental):
     return (datetime.strptime(rental['end_date'], date_format) - datetime.strptime(rental['start_date'], date_format)).days + 1
-
 
 # compute the price of a rental
 def compute_price(rental):
@@ -44,34 +41,29 @@ def compute_price(rental):
 
     return int(time_component+distance_component)
 
-
 # compute the details of the commission
 def compute_commission(rental):
     price = compute_price(rental)
-	price_owner=price
+    price_fee = price
     commission = 0.3*price
     insurance_fee = 0.5*commission
     assistance_fee = 100*number_of_days(rental)
     drivy_fee = commission - (insurance_fee+assistance_fee)
 	
 	#compite the details of option
-	option = find_option(rental)
-	for each option in option:
-		type = option['type']
-		if type=="gps":
-			price+=500
-			price_owner+=500
-		elif type =="baby_seat":
-			price+=200
-			price_owner+=200
-		elif type=="additional_insurance":
-			price=price+1000
-			drivy_fee+=1000
-	
+    option = find_option(rental)
+    type = option['type']
+    if type=="gps":
+        price+=500
+        price_fee+=500
+    elif type =="baby_seat":
+		price+=200
+		price_fee+=200
+    elif type=="additional_insurance":
+		price=price+1000
+		drivy_fee+=1000
 
-    return {'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}
-
-		
+    return {'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}	
 
 # compute the actions for each actor
 def compute_actions(rental):
@@ -80,7 +72,7 @@ def compute_actions(rental):
     commission = sum(commission_details.values())
 
     driver = {"who": "driver", "type": "debit", "amount": price}
-    owner = {"who": "owner", "type": "credit", "amount": price_owner - commission}
+    owner = {"who": "owner", "type": "credit", "amount": price_fee - commission}
     insurance = {"who": "insurance", "type": "credit", "amount": commission_details['insurance_fee']}
     assistance = {"who": "assistance", "type": "credit", "amount": commission_details['assistance_fee']}
     drivy = {"who": "drivy", "type": "credit", "amount": commission_details['drivy_fee']}
