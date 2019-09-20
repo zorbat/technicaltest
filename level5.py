@@ -67,7 +67,7 @@ def compute_commission(rental):
 		    price=price+1000
 		    drivy_fee+=1000
 
-    return {'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}	
+    return {'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}		
 
 # compute the actions for each actor
 def compute_actions(rental):
@@ -89,7 +89,7 @@ with open('data.json') as data_file:
 
 # for each rental, compute the actions and put it in the list
 for rental in data['rentals']:
-    rentals.append({'id': rental['id'], 'option':option ,'actions': compute_actions(rental)})
+    rentals.append({'id': rental['id'], 'option':type ,'actions': compute_actions(rental)})
 
 # write result.json
 with open('result.json', 'w') as outfile:
