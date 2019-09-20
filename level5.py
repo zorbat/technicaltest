@@ -14,7 +14,7 @@ def find_car(rental):
 
 # find options corresponding to the rental
 def find_option(rental):
-    return [option for option in data['options'] if option['rental_id'] == rental['id']]
+    return [option for option in data['options'] if option['rental_id'] == rental['id'][0]]
 
 # compute the number of days of a rental
 def number_of_days(rental):
