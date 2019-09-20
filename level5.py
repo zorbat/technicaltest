@@ -4,6 +4,7 @@ from datetime import datetime
 # date format in data.json
 date_format = "%Y-%m-%d"
 
+
 # list of the rentals
 rentals = []
 
@@ -13,8 +14,7 @@ def find_car(rental):
 
 # find options corresponding to the rental
 def find_option(rental):
-    option = []
-    return [option for option in data['options'] if option['rental_id'] == rental['id']][0]
+    return [option for option in data['options'] if option['rental_id'] == rental['id']]
 
 # compute the number of days of a rental
 def number_of_days(rental):
@@ -61,13 +61,13 @@ def compute_commission(rental):
             price+=500
             price_fee+=500
         elif type =="baby_seat":
-		    price+=200
-		    price_fee+=200
+            price+=200
+            price_fee+=200
         elif type=="additional_insurance":
-		    price=price+1000
-		    drivy_fee+=1000
+            price=price+1000
+            drivy_fee+=1000
 
-    return {'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}		
+    return {'price_fee':int(price_fee), 'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}		
 
 # compute the actions for each actor
 def compute_actions(rental):
@@ -76,7 +76,7 @@ def compute_actions(rental):
     commission = sum(commission_details.values())
 
     driver = {"who": "driver", "type": "debit", "amount": price}
-    owner = {"who": "owner", "type": "credit", "amount": price_fee - commission}
+    owner = {"who": "owner", "type": "credit", "amount": commission_details['price_fee'] - commission}
     insurance = {"who": "insurance", "type": "credit", "amount": commission_details['insurance_fee']}
     assistance = {"who": "assistance", "type": "credit", "amount": commission_details['assistance_fee']}
     drivy = {"who": "drivy", "type": "credit", "amount": commission_details['drivy_fee']}
