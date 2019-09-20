@@ -13,6 +13,7 @@ def find_car(rental):
 
 # find options corresponding to the rental
 def find_option(rental):
+    option = []
     return [option for option in data['options'] if option['rental_id'] == rental['id']][0]
 
 # compute the number of days of a rental
@@ -52,16 +53,19 @@ def compute_commission(rental):
 	
 	#compite the details of option
     option = find_option(rental)
-    type = option['type']
-    if type=="gps":
-        price+=500
-        price_fee+=500
-    elif type =="baby_seat":
-		price+=200
-		price_fee+=200
-    elif type=="additional_insurance":
-		price=price+1000
-		drivy_fee+=1000
+    type = []
+    for option in option:
+        type = option['type']
+    for type in type:
+        if type == "gps":
+            price+=500
+            price_fee+=500
+        elif type =="baby_seat":
+		    price+=200
+		    price_fee+=200
+        elif type=="additional_insurance":
+		    price=price+1000
+		    drivy_fee+=1000
 
     return {'insurance_fee': int(insurance_fee), 'assistance_fee': int(assistance_fee), 'drivy_fee': int(drivy_fee)}	
 
@@ -78,7 +82,6 @@ def compute_actions(rental):
     drivy = {"who": "drivy", "type": "credit", "amount": commission_details['drivy_fee']}
 
     return [driver, owner, insurance, assistance, drivy]
-
 
 # open data.json
 with open('data.json') as data_file:
